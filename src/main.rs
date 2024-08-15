@@ -3,8 +3,11 @@
 // Smaller runs are sorted using insertion_sort(), which is efficient for small arrays.
 // Larger portions of the array are handled by merge_sort().
 
+
+// constant for minimum run size
 const RUN: usize = 32;
 
+// insertion sort on slice of the array
 fn insertion_sort(arr: &mut [i32], left: usize, right: usize) {
     for i in (left + 1)..=right {
         let temp = arr[i];
@@ -17,19 +20,24 @@ fn insertion_sort(arr: &mut [i32], left: usize, right: usize) {
     }
 }
 
+// merge two sorted subarrays
 fn merge_sort(arr: &mut [i32], left: usize, mid: usize, right: usize) {
     let left_len = mid - left + 1;
     let right_len = right - mid;
+
+    // create temp arrays
     let mut left_arr = vec![0; left_len];
     let mut right_arr = vec![0; right_len];
 
+    // copy data to temp arrays
     left_arr.copy_from_slice(&arr[left..=mid]);
     right_arr.copy_from_slice(&arr[(mid + 1)..=right]);
 
-    let mut i = 0;
-    let mut j = 0;
-    let mut k = left;
+    let mut i = 0;      // left_arr index
+    let mut j = 0;      // right_arr index
+    let mut k = left;   // merged array index
 
+    // merge temp arrays back into arr[left..right]
     while i < left_len && j < right_len {
         if left_arr[i] <= right_arr[j] {
             arr[k] = left_arr[i];
@@ -41,12 +49,14 @@ fn merge_sort(arr: &mut [i32], left: usize, mid: usize, right: usize) {
         k += 1;
     }
 
+    // copy remaining elements of left_arr[]
     while i < left_len {
         arr[k] = left_arr[i];
         i += 1;
         k += 1;
     }
 
+    // copy remaining elements of right_arr[]
     while j < right_len {
         arr[k] = right_arr[j];
         j += 1;
@@ -54,13 +64,17 @@ fn merge_sort(arr: &mut [i32], left: usize, mid: usize, right: usize) {
     }
 }
 
+// oh hey Tim, how you doin? 
 fn tim_sort(arr: &mut [i32]) {
     let len = arr.len();
 
+    // sort subarrays of size RUN
     for i in (0..len).step_by(RUN) {
         insertion_sort(arr, i, (i + RUN - 1).min(len - 1));
     }
 
+    // start merging from size RUN (32). 
+    // it will then merge to form size 64, then 128, 256, etc.
     let mut size = RUN;
     while size < len {
         for left in (0..len).step_by(2 * size) {
