@@ -3,9 +3,11 @@
 // Smaller runs are sorted using insertion_sort(), which is efficient for small arrays.
 // Larger portions of the array are handled by merge_sort().
 
+use rand::Rng;
 
 // constant for minimum run size
 const RUN: usize = 32;
+const ARRAY_SIZE: i32 = 10_000_000; // sort 10 million 32 bit ints
 
 // insertion sort on slice of the array
 fn insertion_sort(arr: &mut [i32], left: usize, right: usize) {
@@ -87,8 +89,12 @@ fn tim_sort(arr: &mut [i32]) {
 }
 
 fn main() {
-    let mut arr = vec![10, 3, 2, 19, 7, 15, 23, 13, 1];
-    println!("Before sorting: {:?}", arr);
+
+    let mut rng = rand::thread_rng();
+    let mut arr: Vec<i32> = (0..ARRAY_SIZE).map(|_| rng.gen_range(0..ARRAY_SIZE)).collect();
+
     tim_sort(&mut arr);
-    println!("After sorting: {:?}", arr);
+
+    println!("First 10 elements: {:?}", &arr[..10]);
+    println!("Array length: {}", arr.len());
 }
