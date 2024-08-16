@@ -4,6 +4,8 @@
 // Larger portions of the array are handled by merge_sort().
 
 use rand::Rng;
+use rayon::prelude::*;
+use std::time::Instant;
 
 // constant for minimum run size
 const RUN: usize = 32;
@@ -88,13 +90,49 @@ fn tim_sort(arr: &mut [i32]) {
     }
 }
 
+// parallel application of tim_sort
+fn parallel_tim_sort(arr: &mut [i32]) {
+    let len = arr.len();
+
+    arr.par_chunks_mut(RUN).for_each(|chunk| {
+        insertion_sort(chunk, 0, chunk.len() - 1);
+    });
+
+    let mut size = RUN;
+    while size < len {
+        arr.par_chunks_mut(2 * size).for_each(|chunk| {
+            let chunk_len = chunk.len();
+            if chunk_len > size {
+                let mid = size - 1;
+                let right = chunk_len - 1;
+                merge_sort(chunk, 0, mid, right); 
+            }
+        });
+        size *= 2;
+    }
+}
+
 fn main() {
-
     let mut rng = rand::thread_rng();
-    let mut arr: Vec<i32> = (0..ARRAY_SIZE).map(|_| rng.gen_range(0..ARRAY_SIZE)).collect();
+    
+    // Create two identical arrays for fair comparison
+    let mut arr1: Vec<i32> = (0..ARRAY_SIZE).map(|_| rng.gen_range(0..ARRAY_SIZE)).collect();
+    let mut arr2 = arr1.clone();
 
-    tim_sort(&mut arr);
+    // Time the original tim_sort
+    let start = Instant::now();
+    tim_sort(&mut arr1);
+    let duration = start.elapsed();
+    println!("Time taken by tim_sort: {:?}", duration);
 
-    println!("First 10 elements: {:?}", &arr[..10]);
-    println!("Array length: {}", arr.len());
+    // Time the parallel_tim_sort
+    let start = Instant::now();
+    parallel_tim_sort(&mut arr2);
+    let duration = start.elapsed();
+    println!("Time taken by parallel_tim_sort: {:?}", duration);
+
+    // Verify results
+    println!("First 10 elements (tim_sort): {:?}", &arr1[..10]);
+    println!("First 10 elements (parallel_tim_sort): {:?}", &arr2[..10]);
+    println!("Array length: {}", arr1.len());
 }
