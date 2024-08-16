@@ -1,7 +1,10 @@
-// timsort - 0(n log n) best case, 0(n) worst case. combines insertion sort and merge sort.
-
+// timsort - stable sort that combines insertion sort and merge sort.
+// 
 // Smaller runs are sorted using insertion_sort(), which is efficient for small arrays.
 // Larger portions of the array are handled by merge_sort().
+//
+// Understanding timsort:
+// https://medium.com/@rylanbauermeister/understanding-timsort-191c758a42f3
 
 use rand::Rng;
 use rayon::prelude::*;
