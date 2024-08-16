@@ -12,7 +12,7 @@ use std::time::Instant;
 
 // constant for minimum run size
 const RUN: usize = 32;
-const ARRAY_SIZE: i32 = 10_000_000; // sort 10 million 32 bit ints
+const ARRAY_SIZE: i32 = 10_000_000; 
 
 // insertion sort on slice of the array
 fn insertion_sort(arr: &mut [i32], left: usize, right: usize) {
@@ -118,7 +118,7 @@ fn parallel_tim_sort(arr: &mut [i32]) {
 fn main() {
     let mut rng = rand::thread_rng();
     
-    // Create two identical arrays for fair comparison
+    // Create two identical arrays of signed 32 bit integers for fair comparison
     let mut arr1: Vec<i32> = (0..ARRAY_SIZE).map(|_| rng.gen_range(0..ARRAY_SIZE)).collect();
     let mut arr2 = arr1.clone();
 
