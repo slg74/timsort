@@ -123,16 +123,16 @@ fn main() {
     let start = Instant::now();
     tim_sort(&mut arr1);
     let duration = start.elapsed();
-    println!("Time taken by tim_sort: {:?}", duration);
+    println!("Time taken by tim_sort:                {:?}", duration);
 
     // Time the parallel_tim_sort
     let start = Instant::now();
     parallel_tim_sort(&mut arr2);
     let duration = start.elapsed();
-    println!("Time taken by parallel_tim_sort: {:?}", duration);
+    println!("Time taken by parallel_tim_sort:       {:?}", duration);
 
     // Verify results
-    println!("First 10 elements (tim_sort): {:?}", &arr1[..10]);
+    println!("First 10 elements (tim_sort):          {:?}", &arr1[..10]);
     println!("First 10 elements (parallel_tim_sort): {:?}", &arr2[..10]);
-    println!("Array length: {}", arr1.len());
+    println!("Array length (32 bit signed integers): {} elements", arr1.len());
 }
