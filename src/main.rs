@@ -3,8 +3,8 @@
 // Smaller runs are sorted using insertion_sort(), which is efficient for small arrays.
 // Larger portions of the array are handled by merge_sort().
 //
-// Understanding timsort:
-// https://medium.com/@rylanbauermeister/understanding-timsort-191c758a42f3
+// Understanding timsort (cPython listsort.txt):
+// https://github.com/python/cpython/blob/main/Objects/listsort.txt
 
 use rand::Rng;
 use rayon::prelude::*;
@@ -118,7 +118,7 @@ fn parallel_tim_sort(arr: &mut [i32]) {
 fn main() {
     let mut rng = rand::thread_rng();
     
-    // Create two identical arrays of signed 32 bit integers for fair comparison
+    // Create four identical arrays of signed 32 bit integers for fair comparison
     let mut arr1: Vec<i32> = (0..ARRAY_SIZE).map(|_| rng.gen_range(0..ARRAY_SIZE)).collect();
     let mut arr2 = arr1.clone();
 
